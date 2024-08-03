@@ -31,7 +31,7 @@ object ConfigUtils {
     }
 
     fun getDefaultMoney(): Int {
-        return MoneySystem.getPlugin(MoneySystem::class.java).config.getInt("default-money", 100)
+        return MoneySystem.instance.config.getInt("default-money", 100)
     }
 
     private fun saveMoneyFile() {
