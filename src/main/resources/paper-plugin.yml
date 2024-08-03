@@ -9,7 +9,14 @@ commands:
     description: Setzt das Geld eines Spielers.
     usage: /setmoney <Spieler> <Betrag>
     permission: moneysystem.setmoney
+  moneytool:
+    description: Verwaltung von Spielergeld.
+    usage: /moneytool <get|add|remove> <Spieler> <Betrag>
+    permission: moneysystem.moneytool
 permissions:
   moneysystem.setmoney:
     description: Erlaubt das Setzen des Geldes eines Spielers.
+    default: op
+  moneysystem.moneytool:
+    description: Erlaubt die Verwaltung des Geldes von Spielern.
     default: op

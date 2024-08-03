@@ -22,6 +22,10 @@ class MoneySystem : JavaPlugin() {
             setExecutor(SetMoneyCommand())
             tabCompleter = SetMoneyCommand()
         }
+        getCommand("moneytool")?.apply {
+            setExecutor(MoneyToolCommand())
+            tabCompleter = MoneyToolCommand()
+        }
         server.pluginManager.registerEvents(PlayerJoinListener(), this)
     }
 
