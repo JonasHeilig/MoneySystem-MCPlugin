@@ -2,3 +2,6 @@ name: MoneySystem
 version: '1.0-SNAPSHOT'
 main: de.jonasheilig.moneySystem.MoneySystem
 api-version: '1.21'
+commands:
+  money:
+    description: Zeigt dein Geld an.
