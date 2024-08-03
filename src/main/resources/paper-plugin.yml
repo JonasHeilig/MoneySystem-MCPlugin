@@ -1,0 +1,4 @@
+name: MoneySystem
+version: '1.0-SNAPSHOT'
+main: de.jonasheilig.moneySystem.MoneySystem
+api-version: '1.21'
