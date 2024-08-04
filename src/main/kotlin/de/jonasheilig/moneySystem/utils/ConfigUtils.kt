@@ -46,6 +46,11 @@ object ConfigUtils {
         return shopConfig.getInt("${item.type}.price", 100)
     }
 
+    fun setItemPrice(item: ItemStack, price: Int) {
+        shopConfig.set("${item.type}.price", price)
+        saveShopFile()
+    }
+
     fun getShopItems(): List<ItemStack> {
         val items = mutableListOf<ItemStack>()
         for (key in shopConfig.getConfigurationSection("")?.getKeys(false) ?: emptySet()) {
@@ -53,7 +58,8 @@ object ConfigUtils {
             val price = shopConfig.getInt("$key.price", 100)
             val item = ItemStack(material)
             val meta = item.itemMeta
-            meta?.setDisplayName("$price Geld")
+            meta?.setDisplayName(material.name)
+            meta?.lore = listOf("Preis: $price Geld")
             item.itemMeta = meta
             items.add(item)
         }

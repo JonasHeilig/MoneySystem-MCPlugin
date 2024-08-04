@@ -1,27 +1,28 @@
 package de.jonasheilig.moneySystem.listeners
 
 import de.jonasheilig.moneySystem.utils.ConfigUtils
+import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.ItemStack
 import org.bukkit.event.inventory.InventoryType
+import org.bukkit.inventory.ItemStack
 
 class AdminShopListener : Listener {
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
-        val player = event.whoClicked
+        val player = event.whoClicked as? Player ?: return
         val inventory = event.inventory
 
         if (inventory.type != InventoryType.CHEST) return
 
         val inventoryTitle = event.view.title
 
-        if (inventoryTitle == "EditAdminShop") {
+        if (inventoryTitle.startsWith("EditAdminShop")) {
             event.isCancelled = true
             val clickedItem = event.currentItem ?: return
 
@@ -31,9 +32,11 @@ class AdminShopListener : Listener {
                 event.currentItem = ItemStack(Material.RED_STAINED_GLASS_PANE)
             } else {
                 val price = ConfigUtils.getItemPrice(clickedItem)
-                player.sendMessage("Der Preis für ${clickedItem.type} ist $price Geld.")
+                // Increase price by 10 (for example)
+                ConfigUtils.setItemPrice(clickedItem, price + 10)
+                player.sendMessage("Der Preis für ${clickedItem.type} ist jetzt ${price + 10} Geld.")
             }
-        } else if (inventoryTitle == "AdminShop") {
+        } else if (inventoryTitle.startsWith("AdminShop")) {
             event.isCancelled = true
             val clickedItem = event.currentItem ?: return
             val price = ConfigUtils.getItemPrice(clickedItem)
@@ -45,6 +48,18 @@ class AdminShopListener : Listener {
             } else {
                 player.sendMessage("Du hast nicht genug Geld, um ${clickedItem.type} zu kaufen.")
             }
+        } else {
+            val parts = inventoryTitle.split(" ")
+            if (parts.size >= 4) {
+                val currentPage = parts[2].toIntOrNull() ?: return
+                if (event.slot == 45 && event.currentItem?.type == Material.ARROW) {
+                    player.closeInventory()
+                    openEditShop(player, currentPage - 1)
+                } else if (event.slot == 53 && event.currentItem?.type == Material.ARROW) {
+                    player.closeInventory()
+                    openEditShop(player, currentPage + 1)
+                }
+            }
         }
     }
 
@@ -53,7 +68,7 @@ class AdminShopListener : Listener {
         val inventoryTitle = event.view.title
         val inventory = event.inventory
 
-        if (inventoryTitle == "EditAdminShop") {
+        if (inventoryTitle.startsWith("EditAdminShop")) {
             val shopItems = mutableListOf<ItemStack>()
             for (i in 0..26) {
                 val item = inventory.getItem(i) ?: continue
@@ -63,5 +78,10 @@ class AdminShopListener : Listener {
             }
             ConfigUtils.setShopItems(shopItems)
         }
+    }
+
+    private fun openEditShop(player: Player, page: Int) {
+        val command = Bukkit.getPluginCommand("editadminshop") ?: return
+        command.executor?.onCommand(player, command, "editadminshop", arrayOf(page.toString()))
     }
 }
