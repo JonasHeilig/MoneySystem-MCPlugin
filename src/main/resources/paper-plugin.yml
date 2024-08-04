@@ -13,10 +13,20 @@ commands:
     description: Verwaltung von Spielergeld.
     usage: /moneytool <get|add|remove> <Spieler> <Betrag>
     permission: moneysystem.moneytool
+  adminshop:
+    description: Öffnet den AdminShop.
+    usage: /adminshop
+  editadminshop:
+    description: Öffnet den EditAdminShop.
+    usage: /editadminshop
+    permission: moneysystem.editadminshop
 permissions:
   moneysystem.setmoney:
     description: Erlaubt das Setzen des Geldes eines Spielers.
     default: op
   moneysystem.moneytool:
     description: Erlaubt die Verwaltung des Geldes von Spielern.
+    default: op
+  moneysystem.editadminshop:
+    description: Erlaubt den Zugriff auf den EditAdminShop.
     default: op

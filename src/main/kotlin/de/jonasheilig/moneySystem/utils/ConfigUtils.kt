@@ -44,12 +44,12 @@ object ConfigUtils {
 
     fun getShopItems(): List<ItemStack> {
         val items = mutableListOf<ItemStack>()
-        for (key in shopConfig.getConfigurationSection("").getKeys(false)) {
+        for (key in shopConfig.getConfigurationSection("")?.getKeys(false) ?: emptySet()) {
             val material = Material.getMaterial(key) ?: continue
             val price = shopConfig.getInt("$key.price", 100)
             val item = ItemStack(material)
             val meta = item.itemMeta
-            meta.setDisplayName("$price Geld")
+            meta?.setDisplayName("$price Geld")
             item.itemMeta = meta
             items.add(item)
         }

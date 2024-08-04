@@ -13,9 +13,10 @@ class MoneySystem : JavaPlugin() {
     }
 
     override fun onEnable() {
-
+        instance = this
         saveDefaultConfig()
         ConfigUtils.setupMoneyFile(this)
+        ConfigUtils.setupShopFile(this)
 
         getCommand("money")?.setExecutor(MoneyCommand())
         getCommand("setmoney")?.apply {
@@ -26,7 +27,11 @@ class MoneySystem : JavaPlugin() {
             setExecutor(MoneyToolCommand())
             tabCompleter = MoneyToolCommand()
         }
+        getCommand("adminshop")?.setExecutor(AdminShopCommand())
+        getCommand("editadminshop")?.setExecutor(EditAdminShopCommand())
+
         server.pluginManager.registerEvents(PlayerJoinListener(), this)
+        server.pluginManager.registerEvents(AdminShopListener(), this)
     }
 
     override fun onDisable() {

@@ -9,14 +9,13 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.Material
-import org.bukkit.inventory.meta.ItemMeta
 
 class AdminShopCommand : CommandExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (sender is Player) {
             val inventory = Bukkit.createInventory(null, 54, "AdminShop")
-            val shopItems = ConfigUtils.getShopItems()
+            val shopItems = ConfigUtils.getShopItems().filter { it.type != Material.DIAMOND }
 
             for (item in shopItems) {
                 inventory.addItem(item)
