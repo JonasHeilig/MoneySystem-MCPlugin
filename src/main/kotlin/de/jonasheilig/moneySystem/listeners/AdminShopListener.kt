@@ -22,7 +22,7 @@ class AdminShopListener : Listener {
 
         val inventoryTitle = event.view.title
 
-        if (inventoryTitle.startsWith("EditAdminShop")) {
+        if (inventoryTitle.startsWith("EditSellShop")) {
             event.isCancelled = true
             val clickedItem = event.currentItem ?: return
 
@@ -32,33 +32,7 @@ class AdminShopListener : Listener {
                 event.currentItem = ItemStack(Material.RED_STAINED_GLASS_PANE)
             } else {
                 val price = ConfigUtils.getItemPrice(clickedItem)
-                // Increase price by 10 (for example)
-                ConfigUtils.setItemPrice(clickedItem, price + 10)
-                player.sendMessage("Der Preis für ${clickedItem.type} ist jetzt ${price + 10} Geld.")
-            }
-        } else if (inventoryTitle.startsWith("AdminShop")) {
-            event.isCancelled = true
-            val clickedItem = event.currentItem ?: return
-            val price = ConfigUtils.getItemPrice(clickedItem)
-
-            if (ConfigUtils.getMoney(player.uniqueId) >= price) {
-                ConfigUtils.setMoney(player.uniqueId, ConfigUtils.getMoney(player.uniqueId) - price)
-                player.inventory.addItem(clickedItem)
-                player.sendMessage("${clickedItem.type} für $price Geld gekauft.")
-            } else {
-                player.sendMessage("Du hast nicht genug Geld, um ${clickedItem.type} zu kaufen.")
-            }
-        } else {
-            val parts = inventoryTitle.split(" ")
-            if (parts.size >= 4) {
-                val currentPage = parts[2].toIntOrNull() ?: return
-                if (event.slot == 45 && event.currentItem?.type == Material.ARROW) {
-                    player.closeInventory()
-                    openEditShop(player, currentPage - 1)
-                } else if (event.slot == 53 && event.currentItem?.type == Material.ARROW) {
-                    player.closeInventory()
-                    openEditShop(player, currentPage + 1)
-                }
+                player.sendMessage("Das Item ${clickedItem.type} ist jetzt ${if (event.currentItem?.type == Material.GREEN_STAINED_GLASS_PANE) "zum Verkauf verfügbar" else "nicht zum Verkauf verfügbar"}.")
             }
         }
     }
@@ -68,20 +42,15 @@ class AdminShopListener : Listener {
         val inventoryTitle = event.view.title
         val inventory = event.inventory
 
-        if (inventoryTitle.startsWith("EditAdminShop")) {
-            val shopItems = mutableListOf<ItemStack>()
-            for (i in 0..26) {
+        if (inventoryTitle.startsWith("EditSellShop")) {
+            val sellItems = mutableListOf<ItemStack>()
+            for (i in 0 until inventory.size) {
                 val item = inventory.getItem(i) ?: continue
                 if (inventory.getItem(i + 27)?.type == Material.GREEN_STAINED_GLASS_PANE) {
-                    shopItems.add(item)
+                    sellItems.add(item)
                 }
             }
-            ConfigUtils.setShopItems(shopItems)
+            ConfigUtils.setSellItems(sellItems)
         }
-    }
-
-    private fun openEditShop(player: Player, page: Int) {
-        val command = Bukkit.getPluginCommand("editadminshop") ?: return
-        command.executor?.onCommand(player, command, "editadminshop", arrayOf(page.toString()))
     }
 }

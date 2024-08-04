@@ -1,9 +1,9 @@
 package de.jonasheilig.moneySystem.utils
 
 import de.jonasheilig.moneySystem.MoneySystem
+import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
-import org.bukkit.Material
 import java.io.File
 import java.util.UUID
 
@@ -43,7 +43,9 @@ object ConfigUtils {
     }
 
     fun getItemPrice(item: ItemStack): Int {
-        return shopConfig.getInt("${item.type}.price", 100)
+        val basePrice = shopConfig.getInt("${item.type}.price", 100)
+        val discount = getDiscount()
+        return (basePrice * (100 - discount) / 100).toInt()
     }
 
     fun setItemPrice(item: ItemStack, price: Int) {
@@ -51,11 +53,21 @@ object ConfigUtils {
         saveShopFile()
     }
 
+    fun setItemActive(material: Material, active: Boolean) {
+        shopConfig.set("${material.name}.active", active)
+        saveShopFile()
+    }
+
+    fun isItemActive(material: Material): Boolean {
+        return shopConfig.getBoolean("${material.name}.active", true)
+    }
+
     fun getShopItems(): List<ItemStack> {
         val items = mutableListOf<ItemStack>()
         for (key in shopConfig.getConfigurationSection("")?.getKeys(false) ?: emptySet()) {
             val material = Material.getMaterial(key) ?: continue
-            val price = shopConfig.getInt("$key.price", 100)
+            if (!isItemActive(material)) continue
+            val price = getItemPrice(ItemStack(material))
             val item = ItemStack(material)
             val meta = item.itemMeta
             meta?.setDisplayName(material.name)
@@ -66,16 +78,24 @@ object ConfigUtils {
         return items
     }
 
-    fun setShopItems(items: List<ItemStack>) {
-        shopConfig.getKeys(false).forEach { shopConfig.set(it, null) }
+    fun setSellItems(items: List<ItemStack>) {
+        shopConfig.getKeys(false).forEach { key -> shopConfig.set(key, null) }
+
         for (item in items) {
-            shopConfig.set("${item.type}.price", getItemPrice(item))
+            if (item.type == Material.GREEN_STAINED_GLASS_PANE) continue
+            setItemPrice(item, getItemPrice(item))
+            setItemActive(item.type, true)
         }
         saveShopFile()
     }
 
-    fun getDefaultMoney(): Int {
-        return MoneySystem.instance.config.getInt("default-money", 100)
+    fun getDiscount(): Int {
+        return MoneySystem.instance.config.getInt("discount", 0)
+    }
+
+    fun setDiscount(discount: Int) {
+        MoneySystem.instance.config.set("discount", discount)
+        MoneySystem.instance.saveConfig()
     }
 
     private fun saveMoneyFile() {
@@ -86,7 +106,7 @@ object ConfigUtils {
         shopConfig.save(shopFile)
     }
 
-    fun getExchangeRate(): Int {
-        return MoneySystem.instance.config.getInt("exchange-rate", 10)
+    private fun getDefaultMoney(): Int {
+        return 1000 // Beispielwert
     }
 }

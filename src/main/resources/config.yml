@@ -1,2 +1,3 @@
 default-money: 1000
 exchange-rate: 100 # Wert eines Diamanten
+sell-discount: 0
