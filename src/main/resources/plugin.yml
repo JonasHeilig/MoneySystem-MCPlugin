@@ -23,6 +23,13 @@ commands:
   pay:
     description: Schicke einem anderen Spieler Geld
     usage: /pay <Spieler> <Betrag>
+  sell:
+    description: Zeigt die Verkaufsliste an.
+    usage: /sell
+  editsell:
+    description: Bearbeitet die Verkaufseinstellungen.
+    usage: /editsell <command>
+    permission: moneySystem.editsell
   atm:
     description: Öffnet den ATM für den Geld- und Diamantentausch.
 permissions:
@@ -34,4 +41,7 @@ permissions:
     default: op
   moneysystem.editadminshop:
     description: Erlaubt den Zugriff auf den EditAdminShop.
+    default: op
+  moneySystem.editsell:
+    description: Erlaubt die Nutzung des EditSell-Befehls.
     default: op

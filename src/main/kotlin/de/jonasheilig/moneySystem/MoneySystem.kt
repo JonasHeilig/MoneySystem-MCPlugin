@@ -37,6 +37,8 @@ class MoneySystem : JavaPlugin() {
         getCommand("adminshop")?.setExecutor(AdminShopCommand())
         getCommand("editadminshop")?.setExecutor(EditAdminShopCommand())
         getCommand("atm")?.setExecutor(ATMCommand())
+        getCommand("sell")?.setExecutor(SellCommand())
+        getCommand("editsell")?.setExecutor(EditSellCommand())
 
         server.pluginManager.registerEvents(PlayerJoinListener(), this)
         server.pluginManager.registerEvents(AdminShopListener(), this)
