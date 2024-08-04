@@ -38,6 +38,10 @@ object ConfigUtils {
         saveMoneyFile()
     }
 
+    fun hasMoney(uuid: UUID): Boolean {
+        return moneyConfig.contains(uuid.toString())
+    }
+
     fun getItemPrice(item: ItemStack): Int {
         return shopConfig.getInt("${item.type}.price", 100)
     }
@@ -77,7 +81,6 @@ object ConfigUtils {
     }
 
     fun getExchangeRate(): Int {
-    return MoneySystem.instance.config.getInt("exchange-rate", 10)
-}
-
+        return MoneySystem.instance.config.getInt("exchange-rate", 10)
+    }
 }

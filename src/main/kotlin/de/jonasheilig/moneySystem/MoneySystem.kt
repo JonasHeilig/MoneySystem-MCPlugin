@@ -32,6 +32,7 @@ class MoneySystem : JavaPlugin() {
 
         server.pluginManager.registerEvents(PlayerJoinListener(), this)
         server.pluginManager.registerEvents(AdminShopListener(), this)
+        server.pluginManager.registerEvents(ATMListener(), this)
     }
 
     override fun onDisable() {
