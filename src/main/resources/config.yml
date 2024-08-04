@@ -1,1 +1,2 @@
-default-money: 100
+default-money: 1000
+exchange-rate: 100 # Wert eines Diamanten

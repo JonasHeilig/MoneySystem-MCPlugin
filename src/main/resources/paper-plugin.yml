@@ -20,6 +20,8 @@ commands:
     description: Öffnet den EditAdminShop.
     usage: /editadminshop
     permission: moneysystem.editadminshop
+  atm:
+    description: Öffnet den ATM für den Geld- und Diamantentausch.
 permissions:
   moneysystem.setmoney:
     description: Erlaubt das Setzen des Geldes eines Spielers.

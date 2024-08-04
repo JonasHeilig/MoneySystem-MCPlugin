@@ -75,4 +75,9 @@ object ConfigUtils {
     private fun saveShopFile() {
         shopConfig.save(shopFile)
     }
+
+    fun getExchangeRate(): Int {
+    return MoneySystem.instance.config.getInt("exchange-rate", 10)
+}
+
 }
