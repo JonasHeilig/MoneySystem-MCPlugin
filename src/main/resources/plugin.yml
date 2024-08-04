@@ -20,6 +20,9 @@ commands:
     description: Öffnet den EditAdminShop.
     usage: /editadminshop
     permission: moneysystem.editadminshop
+  pay:
+    description: Schicke einem anderen Spieler Geld
+    usage: /pay <Spieler> <Betrag>
   atm:
     description: Öffnet den ATM für den Geld- und Diamantentausch.
 permissions:

@@ -23,10 +23,17 @@ class MoneySystem : JavaPlugin() {
             setExecutor(SetMoneyCommand())
             tabCompleter = SetMoneyCommand()
         }
+
         getCommand("moneytool")?.apply {
             setExecutor(MoneyToolCommand())
             tabCompleter = MoneyToolCommand()
         }
+
+        getCommand("pay")?.apply {
+            setExecutor(PayCommand())
+            tabCompleter = PayCommand()
+        }
+
         getCommand("adminshop")?.setExecutor(AdminShopCommand())
         getCommand("editadminshop")?.setExecutor(EditAdminShopCommand())
         getCommand("atm")?.setExecutor(ATMCommand())
